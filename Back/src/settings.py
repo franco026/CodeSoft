@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'rest_framework',
     'corsheaders',
     'apps.users'
@@ -128,3 +130,28 @@ STATIC_URL = '/static/'
 
 AUTH_UNIQUE_EMAIL = True
 AUTH_USER_MODEL = 'users.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES':(
+        'rest_framework.permissions.IsAuthenticated',
+
+     ),  
+}
+JWT_AUTH = {
+    'JWT_PAYLOAD_HANDLER':
+    'rest_framework_jwt.utils.jwt_payload_handler',
+
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    'apps.users.utils.custom_jwt_response_handler',
+}
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+
+CORS_ORIGIN_WHITELIST = ('http://localhost:3000',)
+CORS_ALLOW_CREDENTIALS = True
