@@ -1,10 +1,10 @@
-from .models import User
+from .models import User, patient, medical
 from django.http import HttpResponseRedirect
-from rest_framework import permissions, status,views
+from rest_framework import permissions, status,views, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UsersSerializer, RegisterSerializer
+from .serializers import UsersSerializer, RegisterSerializer, RegisterpatientSerializer
 
 
 class current_user(APIView):
@@ -36,13 +36,43 @@ class current_user(APIView):
 
 class Usersignup(APIView):
     permission_classes = (permissions.AllowAny, )
-
+    
     def post(self, request):
+        print(request.data)
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         data =  RegisterSerializer(user).data
-        return Response({"response" : "success", "message" : "user created succesfully"})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
         #return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class Usersignuppatient(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny, )
+    queryset = patient.objects.all()
+    serializer_class = RegisterpatientSerializer
+    def post(self, request):
+        print(request.data)
+        serializer = RegisterpatientSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        data =  RegisterpatientSerializer(user).data
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        #return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class Usersignupdoctor(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny, )
+    queryset = medical.objects.all()
+    serializer_class = RegisterSerializer
+    def post(self, request):
+        print(request.data)
+        serializer = RegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        data =  RegisterSerializer(user).data
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        #return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+         
     
     

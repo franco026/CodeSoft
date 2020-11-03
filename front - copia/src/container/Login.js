@@ -33,7 +33,6 @@ const LoginUser = () => {
                     <input type="password" className="form-control" name="password" required/>
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
-                <Link to='/register' className="ml-5 btn btn-success">Register</Link>
             </form>
         </Fragment>
      );

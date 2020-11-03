@@ -55,15 +55,20 @@ export const authLogin = (username, password) =>{
         })
     }
 }
-export const authSignUp = (username, email, password1, password2) =>{
+export const authSignUpPatient = (username, email, password1, password2, first_name, last_name,idDoctor) =>{
     return dispatch => { 
         dispatch(authStart());
         let data = JSON.stringify({
-            email:email,
-            username:username,
-            password:password1
+            username: username,
+            email: email,
+            password: password1,
+            first_name: first_name,
+            last_name: last_name,
+            doctores: idDoctor
         })
-        axios.post('/accounts/users/',data,{
+        
+        localStorage.removeItem('Doctores')
+        axios.post('http://localhost:8000/patient/',data,{
             headers: {
             'Content-Type': 'application/json'
           }
@@ -84,6 +89,41 @@ export const authSignUp = (username, email, password1, password2) =>{
         })
     }
 }
+
+export const authSignUpDoctor = (username, email, password1, password2, first_name, last_name) =>{
+    return dispatch => { 
+        dispatch(authStart());
+        let data = JSON.stringify({
+            username:username,
+            email:email,
+            password:password1,
+            first_name  : first_name,
+            last_name: last_name
+
+        })
+        axios.post('http://localhost:8000/users/',data,{
+            headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res=>{
+            console.log(res)
+            const token = res.data.token;
+            const expirationDate = new Date(new Date().getTime()+3600 * 1000)
+            localStorage.setItem('token',token)
+            localStorage.setItem('expirationDate',expirationDate)
+            localStorage.setItem('userName',res.data.username)
+            dispatch(authSuccess(token))
+            dispatch(checkAuthTime(3600))
+        })
+        .catch(err =>{
+            dispatch(authFail())
+            dispatch(errorMessage(err.response.data, err.response.status))
+        })
+    }
+}
+
+
 export const authCheckState = ()=>{
     return dispatch=>{      
         const token = localStorage.getItem('token')
