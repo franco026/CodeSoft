@@ -6,6 +6,8 @@ import SideMenu from './components/Layout/SideMenu';
 import Reports from './components/Reports'
 import Chat from './components/Chat';
 import LoginUser from './container/Login';
+import Register from './container/Register';
+import RegisterPatientr from './container/RegisterPatient';
 
 const BaseRouter = () => (
   <div>
@@ -14,6 +16,8 @@ const BaseRouter = () => (
     <Route exact path='/reports' component={Reports} />
     <Route exact path='/Login' component={LoginUser} />
     <Route exact path='/chat' component={Chat} />
+    <Route exact path='/SingUp' component={Register} />
+    <Route exact path='/SingUpPatient' component={RegisterPatientr} />
   </div>
 );
 
